@@ -1,9 +1,12 @@
+import instagram from './instagram.png';
+import './Home.css';
+
 const Home = () => {
     return (
       <div className="container">
-        <header>
-          <div>Instagram</div>
-          <div className="search-bar">Search</div>
+        <header className='nav-bar'>
+          <img className='instagram' alt='instagram' src={instagram} />
+          <input className="search-bar" placeholder='Search'/>
           <div>
             <button>Log In</button>
             <div>Sign Up</div>
