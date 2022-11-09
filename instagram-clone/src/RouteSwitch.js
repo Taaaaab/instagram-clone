@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import App from "./App";
 import Home from "./Home";
+import Profile from "./Profile";
 
 const RouteSwitch = () => {
   return (
@@ -8,6 +9,7 @@ const RouteSwitch = () => {
       <Routes>
         <Route path="/" element={<App />} />
         <Route path="/home" element={<Home />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
     </BrowserRouter>
   );
