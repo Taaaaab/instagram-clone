@@ -2,10 +2,11 @@
     text-align: center;
     min-height: 100vh;
     background-color: #fafafa;
+    font-family: Helvetica, Arial, sans-serif;
 }
   
 .instagram {
-    margin: 30px;
+    margin-top: 10px;
     width: 100px;
 }
   
@@ -19,34 +20,150 @@
     border: 1px solid lightgray;
 }
     
-input {
-    font-size: 16px;
-    letter-spacing: normal;
-    word-spacing: normal;
-    line-height: normal;
-    text-transform: none;
-    text-indent: 0px;
-    text-shadow: none;
-    display: inline-block;
-    text-align: start;
-    appearance: auto;
-    cursor: text;
-    background-color: field;
-    padding: 5px;
+.Search-bar {
+    width: 270px;
+    height: 35px;
+    border-radius: 8px;
+    display: flex;
+    background-color: #efefef;
+}
+
+.Search-img {
+    filter: invert(10%) sepia(20%) saturate(10%) hue-rotate(12deg) brightness(10%) contrast(10%);
+    max-width: 20px;
+    padding-left: 20px;
+    padding-right: 5px;
+}
+
+.Search-input {
+   border: none;
+   background-color: #efefef;
+   font-size: 1rem;
+}
+
+.Search-input:focus {
+    outline: none;
+    outline-width: none;
+    box-shadow: none;
+    border-top-style: hidden;
+    border-right-style: hidden;
+    border-left-style: hidden;
+    border-bottom-style: hidden;
+ }
+
+.Login-signup {
+    display: flex;
+    align-items: center;
+}
+
+.Login {
+    background-color: #0095f6;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 5px;
+    width: 60px;
     height: 30px;
-    width: 250px;
-    border: none;
-    background-color: #fafafa;
-    border-radius: 10px;
+    border: 0 none;
+    margin-right: 10px;
+}
+
+.Signup {
+    color: #0095f6;
+    font-size: 14px;
+    font-weight: bold;
 }
 
 .Img-box {
     width: 500px;
-    height: 500px;
+    height: 730px;
     margin-top: 50px;
     margin-left: 100px;
     border-radius: 20px;
     background-color: #ffffff;
     box-shadow: rgba(0, 0, 0, 0.198) 0px 10px 50px;
+    display: flex;
+    flex-direction: column;
 }
-  
+
+.Img-top {
+    display: flex;
+    align-items: center;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding-left: 20px;
+}
+
+.Name-box {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+}
+
+.Name {
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.Username {
+    color: grey;
+}
+
+.Profile-pic { 
+    max-width: 40px;
+}
+
+.Bushbaby-img {
+    min-width: 100%;
+}
+
+.Img-icons {
+    display: flex;
+    justify-content: space-between;
+    padding: 18px;
+}
+
+.Img-comments {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    padding-left: 18px;
+    margin-top: -5px;
+}
+
+svg {
+    margin-right: 8px;
+}
+
+.likes {
+    font-weight: bold;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.view-all {
+    color: grey;
+    font-size: 14px;
+}
+
+.line {
+    margin-top: 10px;
+    width: 450px;
+    border: solid 1px #efefef;
+}
+
+.Add-comment {
+    border: none;
+    background-color: #ffffff;
+    font-size: 14px;
+ }
+ 
+ .Add-comment:focus {
+     outline: none;
+     outline-width: none;
+     box-shadow: none;
+     border-top-style: hidden;
+     border-right-style: hidden;
+     border-left-style: hidden;
+     border-bottom-style: hidden;
+  }
