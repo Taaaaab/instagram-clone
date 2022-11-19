@@ -4,7 +4,7 @@ import profile from '../images/profile.png';
 import bushBaby from '../images/bushbaby.jpeg';
 import '../Home.css';
 
-const Home = () => {
+const Dashboard = () => {
     return (
       <div className='container'>
         <header className='nav-bar'>
@@ -78,4 +78,4 @@ const Home = () => {
     );
   };
   
-  export default Home;
+  export default Dashboard;

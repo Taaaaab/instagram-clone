@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import firebaseApp from '../firebase';
-import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { useAuth } from '../contexts/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
 import phone from '../images/phone.png';
@@ -9,31 +9,24 @@ import appstore from '../images/appstore.png';
 import playstore from '../images/playstore.png';
 import '../App.css';
 
-export default function Signup() {
+export default function Login() {
     const emailRef = useRef();
     const passwordRef = useRef();
-    const passwordConfirmRef = useRef();
     const authentication = getAuth();
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
     async function handleSubmit(e) {
       e.preventDefault()
 
-      if (passwordRef.current.value !==
-        passwordConfirmRef.current.value) {
-          return setError('Passwords do not match')
-        }
-      
-
       try {
         setError('')
         setLoading(true)
-        await createUserWithEmailAndPassword(authentication, emailRef.current.value, passwordRef.current.value)
+        await signInWithEmailAndPassword(authentication, emailRef.current.value, passwordRef.current.value)
         navigate('/dashboard')
       } catch {
-        setError('Failed to create an account')
+        setError('Failed to log in')
       }
       setLoading(false)
     }
@@ -59,17 +52,11 @@ export default function Signup() {
             placeholder='Password' 
             required 
             />
-            <input 
-            type="password"
-            ref={passwordConfirmRef}
-            placeholder='Confirm Password' 
-            required 
-            />
-            <button disabled={loading} className='Login-btn'>Sign up</button>
+            <button disabled={loading} className='Login-btn'>Log in</button>
           </form>
         </div>
         <div className='Signup-box'>
-            Already have an account? <Link to="/">&nbsp;Log in</Link>
+            Don't have an account? <Link to="/signup">&nbsp;Sign Up</Link>&nbsp;or<Link to='/dashboard'> &nbsp;Enter as guest</Link>
         </div>
         <div className='get-app'>Get the app.</div>
         <a href='https://apps.apple.com/app/instagram/id389801252?vt=lo'>
