@@ -1,32 +1,30 @@
 import React, { useRef, useState } from 'react';
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
-import { useAuth } from '../contexts/AuthContext';
-import { Link, useNavigate } from 'react-router-dom';
+import { getAuth, sendPasswordResetEmail } from 'firebase/auth'
+import { Link } from 'react-router-dom';
 import phone from '../images/phone.png';
 import instagram from '../images/instagram.png';
 import appstore from '../images/appstore.png';
 import playstore from '../images/playstore.png';
 import '../App.css';
-import ForgotPassword from './ForgotPassword';
 
-export default function Login() {
+export default function ForgotPassword() {
     const emailRef = useRef();
-    const passwordRef = useRef();
-    const authentication = getAuth();
+    const auth = getAuth();
     const [error, setError] = useState('');
+    const [message, setMessage] = useState('');
     const [loading, setLoading] = useState(false);
-    const navigate = useNavigate();
 
     async function handleSubmit(e) {
       e.preventDefault()
 
       try {
+        setMessage('')
         setError('')
         setLoading(true)
-        await signInWithEmailAndPassword(authentication, emailRef.current.value, passwordRef.current.value)
-        navigate('/dashboard')
+        await sendPasswordResetEmail(auth, emailRef.current.value)
+        setMessage('Check your inbox for further instructions')
       } catch {
-        setError('Failed to log in')
+        setError('Failed to reset password')
       }
       setLoading(false)
     }
@@ -38,26 +36,21 @@ export default function Login() {
       <div className='Right-box'>
       <div className='Login-box'>
           <img className='Instagram' alt='Instagram' src={instagram} />
+          {message && <div className='message'>{message}</div>}
           {error && <div className='error'>{error}</div>}
           <form className='Login-form' onSubmit={handleSubmit}>
             <input 
             type="email" 
             ref={emailRef}
-            placeholder='Username or email' 
+            placeholder='Email' 
             required
             />
-            <input 
-            type="password"
-            ref={passwordRef}
-            placeholder='Password' 
-            required 
-            />
-            <button disabled={loading} className='Login-btn'>Log in</button>
+            <button disabled={loading} className='Login-btn'>Reset Password</button>
           </form>
-          <Link className='forgot' to='/forgot-password'>Forgot Password?</Link>
+          <Link className='forgot' to='/'>Login</Link>
         </div>
         <div className='Signup-box'>
-            Don't have an account? <Link to="/signup">&nbsp;Sign Up</Link>&nbsp;or<Link to='/dashboard'> &nbsp;Enter as guest</Link>
+            Don't have an account? <Link to="/signup">&nbsp;Sign Up</Link>
         </div>
         <div className='get-app'>Get the app.</div>
         <a href='https://apps.apple.com/app/instagram/id389801252?vt=lo'>

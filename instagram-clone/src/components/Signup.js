@@ -1,5 +1,4 @@
 import React, { useRef, useState } from 'react';
-import firebaseApp from '../firebase';
 import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
 import { useAuth } from '../contexts/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';

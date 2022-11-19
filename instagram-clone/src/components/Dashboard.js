@@ -1,10 +1,28 @@
+import React, {useState} from 'react';
+import {useAuth} from '../contexts/AuthContext';
 import instagram from '../images/instagram.png';
 import search from '../images/search.svg';
 import profile from '../images/profile.png';
 import bushBaby from '../images/bushbaby.jpeg';
-import '../Home.css';
+import '../Dashboard.css';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
+  const [error, setError] = useState('');
+  const {currentUser, logout} = useAuth();
+  const navigate = useNavigate();
+
+  async function handleLogout() {
+    setError('')
+
+    try {
+      await logout()
+      navigate('/')
+    } catch {
+      setError('Failed to log out')
+    }
+  }
+
     return (
       <div className='container'>
         <header className='nav-bar'>
@@ -14,8 +32,8 @@ const Dashboard = () => {
             <input className='Search-input' placeholder='Search'/>
           </div>
           <div className='Login-signup'>
-            <button id='sign-in' className='Login'>Log In</button>
-            <div className='Signup'>Sign Up</div>
+            <strong>Email:</strong> {currentUser.email}
+            <button onClick={handleLogout} id='sign-in' className='Login'>Log Out</button>
           </div>
         </header>
         <div className='Img-box'>

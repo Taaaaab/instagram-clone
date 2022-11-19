@@ -131,6 +131,26 @@ a {
   text-decoration: none;
 }
 
+.message {
+  position: absolute;
+  top: 218px;
+  background-color: lightgreen;
+  border-radius: 5px;
+  padding: 5px;
+  font-size: 16px;
+  color: darkgreen;
+  width: 260px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.forgot {
+  bottom: 20px;
+  font-size: 14px;
+}
+
 .get-app {
   margin: 20px;
   font-size: 15px;
