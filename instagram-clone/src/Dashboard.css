@@ -1,3 +1,7 @@
+body {
+    background-color: #fafafa;
+}
+
 .container {
     text-align: center;
     min-height: 100vh;
@@ -81,6 +85,7 @@
     height: auto;
     margin-top: 60px;
     margin-left: 100px;
+    margin-bottom: 60px;
     border-radius: 20px;
     background-color: #ffffff;
     box-shadow: rgba(0, 0, 0, 0.198) 0px 10px 50px;
