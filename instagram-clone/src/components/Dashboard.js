@@ -15,6 +15,13 @@ import {
   getFirestore,
   collection,
   addDoc,
+  query,
+  orderBy,
+  limit,
+  onSnapshot,
+  setDoc,
+  updateDoc,
+  doc,
   serverTimestamp,
 } from 'firebase/firestore';
 import {
@@ -52,7 +59,7 @@ const Dashboard = () => {
     e.preventDefault()
   // Add a new message entry to the Firebase database.
   try {
-    await addDoc(collection(getFirestore(), commentRef.current.value), {
+    await addDoc(collection(getFirestore(), 'comments'), {
       name: currentUser.email,
       text: commentRef.current.value,
       timestamp: serverTimestamp()
@@ -64,24 +71,26 @@ const Dashboard = () => {
   }
  }
 
-//   // Loads chat messages history and listens for upcoming ones.
-//   function loadMessages() {
-//   // Create the query to load the last 12 messages and listen for new ones.
-//   const recentMessagesQuery = query(collection(getFirestore(), 'messages'), orderBy('timestamp', 'desc'), limit(12));
+  // Loads chat messages history and listens for upcoming ones.
+  function loadMessages() {
+    // Create the query to load the last 12 messages and listen for new ones.
+    const recentMessagesQuery = query(collection(getFirestore(), 'messages'), orderBy('timestamp', 'desc'), limit(12));
   
-//   // Start listening to the query.
-//   onSnapshot(recentMessagesQuery, function(snapshot) {
-//     snapshot.docChanges().forEach(function(change) {
-//       if (change.type === 'removed') {
-//         deleteMessage(change.doc.id);
-//       } else {
-//         var message = change.doc.data();
-//         displayMessage(change.doc.id, message.timestamp, message.name,
-//                       message.text, message.profilePicUrl, message.imageUrl);
-//       }
-//     });
-//   });
-//  }
+    // Start listening to the query.
+  //   onSnapshot(recentMessagesQuery, function(snapshot) {
+  //   snapshot.docChanges().forEach(function(change) {
+  //     if (change.type === 'removed') {
+  //     //  deleteMessage(change.doc.id);
+  //     } else {
+  //       var message = change.doc.data();
+  //       displayMessage(change.doc.id, message.timestamp, message.name,
+  //                     message.text, message.profilePicUrl, message.imageUrl);
+  //     }
+  //   });
+  // });
+ }
+
+ 
 
     return (
       <div className='container'>
@@ -119,6 +128,7 @@ const Dashboard = () => {
           </div>
           <div className='Img-comments'>
             <div className='likes'>{likes} likes</div>
+            
             <div className='view-all'>View All Comments</div>
             <span className='line'></span>
             <input className='Add-comment' ref={commentRef} type='text' placeholder='Add a comment...' />
