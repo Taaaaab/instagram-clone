@@ -7,7 +7,6 @@ import instagram from '../images/instagram.png';
 import appstore from '../images/appstore.png';
 import playstore from '../images/playstore.png';
 import '../App.css';
-import ForgotPassword from './ForgotPassword';
 
 export default function Login() {
     const emailRef = useRef();
