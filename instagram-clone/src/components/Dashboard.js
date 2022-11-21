@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import instagram from '../images/instagram.png';
 import search from '../images/search.svg';
@@ -9,28 +9,13 @@ import CommentImage from './CommentImage';
 import '../Dashboard.css';
 import {useAuth} from '../contexts/AuthContext';
 import {
-  getAuth,
-} from 'firebase/auth';
-import {
   getFirestore,
   collection,
+  getDocs,
   addDoc,
-  query,
-  orderBy,
-  limit,
-  onSnapshot,
-  setDoc,
-  updateDoc,
-  doc,
   serverTimestamp,
 } from 'firebase/firestore';
-import {
-  getStorage,
-  ref,
-  uploadBytesResumable,
-  getDownloadURL,
-} from 'firebase/storage';
-import { getMessaging, getToken, onMessage } from 'firebase/messaging';
+import { db } from '../lib/init-firebase';
 
 const Dashboard = () => {
   const [likes, setLikes] = useState(0);
@@ -38,6 +23,28 @@ const Dashboard = () => {
   const {currentUser, logout} = useAuth();
   const navigate = useNavigate();
   const commentRef = useRef();
+  const [comments, setComments] = useState([]);
+
+  useEffect(() => {
+    getComments()
+  }, []);
+
+  useEffect(() => {
+    console.log(comments)
+  }, [comments])
+
+  function getComments() {
+    const commentCollectionRef = collection(db, 'comments')
+    getDocs(commentCollectionRef)
+      .then(response => {
+        const comm = response.docs.map(doc => ({
+          data: doc.data(),
+          id: doc.id, 
+        }))
+        setComments(comm)
+    }).catch(error => console.log(error.message))
+
+  }
 
   async function handleLogout() {
     setError('')
@@ -70,27 +77,6 @@ const Dashboard = () => {
     console.error('Error writing new message to Firebase Database', error);
   }
  }
-
-  // Loads chat messages history and listens for upcoming ones.
-  function loadMessages() {
-    // Create the query to load the last 12 messages and listen for new ones.
-    const recentMessagesQuery = query(collection(getFirestore(), 'messages'), orderBy('timestamp', 'desc'), limit(12));
-  
-    // Start listening to the query.
-  //   onSnapshot(recentMessagesQuery, function(snapshot) {
-  //   snapshot.docChanges().forEach(function(change) {
-  //     if (change.type === 'removed') {
-  //     //  deleteMessage(change.doc.id);
-  //     } else {
-  //       var message = change.doc.data();
-  //       displayMessage(change.doc.id, message.timestamp, message.name,
-  //                     message.text, message.profilePicUrl, message.imageUrl);
-  //     }
-  //   });
-  // });
- }
-
- 
 
     return (
       <div className='container'>
@@ -128,8 +114,10 @@ const Dashboard = () => {
           </div>
           <div className='Img-comments'>
             <div className='likes'>{likes} likes</div>
-            
             <div className='view-all'>View All Comments</div>
+            <ul className='comments'>
+              {comments.map(comment => <li key={comment.id}><strong>{comment.data.name}</strong>&nbsp;{comment.data.text}</li>)}
+            </ul>
             <span className='line'></span>
             <input className='Add-comment' ref={commentRef} type='text' placeholder='Add a comment...' />
           </div>
