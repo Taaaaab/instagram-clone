@@ -25,6 +25,10 @@ const Dashboard = () => {
   const commentRef = useRef();
   const [comments, setComments] = useState([]);
 
+  function handleLike() {
+    setLikes(likes + 1)
+  }
+
   useEffect(() => {
     getComments()
   }, []);
@@ -57,9 +61,6 @@ const Dashboard = () => {
     }
   }
 
-  function handleLike() {
-    setLikes(likes + 1)
-  }
 
   // Saves a new message to Cloud Firestore.
   async function saveMessage(e) {
@@ -114,7 +115,7 @@ const Dashboard = () => {
           </div>
           <div className='Img-comments'>
             <div className='likes'>{likes} likes</div>
-            <div className='view-all'>View All Comments</div>
+            <button onClick={() => getComments()} className='view-all'>View All Comments</button>
             <ul className='comments'>
               {comments.map(comment => <li key={comment.id}><strong>{comment.data.name}</strong>&nbsp;{comment.data.text}</li>)}
             </ul>
