@@ -1,9 +1,9 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { 
-  getAuth, 
-  connectAuthEmulator,
-  signInWithEmailAndPassword 
+  signInWithEmailAndPassword,
+  onAuthStateChanged,
 } from 'firebase/auth';
+import { auth } from '../firebase-config';
 import { Link, useNavigate } from 'react-router-dom';
 import phone from '../images/phone.png';
 import instagram from '../images/instagram.png';
@@ -12,27 +12,36 @@ import playstore from '../images/playstore.png';
 import '../App.css';
 
 export default function Login() {
-    const emailRef = useRef();
-    const passwordRef = useRef();
-    const auth = getAuth();
+    const [loginEmail, setLoginEmail] = useState('');
+    const [loginPassword, setLoginPassword] = useState('');
     const [error, setError] = useState('');
-    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
-    async function handleSubmit(e) {
-      e.preventDefault()
+    const [user, setUser] = useState({});
 
-      try {
-        setError('')
-        setLoading(true)
-        const userCredential = await signInWithEmailAndPassword(auth, emailRef.current.value, passwordRef.current.value)
-          navigate('/dashboard')
-      } 
-      catch {
-        setError('Failed to log in')
-      }
-      setLoading(false)
+    onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+    })
+
+    function handleSubmit(e) {
+      e.preventDefault();
+      handleLogin();
     }
+
+    const handleLogin = async () => {
+      try {
+        setError('');
+        const user = await signInWithEmailAndPassword(
+          auth, 
+          loginEmail, 
+          loginPassword
+        );
+        console.log(user);
+        navigate('/dashboard');
+      } catch (error) {
+        setError('Failed to create an account');
+      }
+    };
 
   return (
     <div className="App">
@@ -45,22 +54,26 @@ export default function Login() {
           <form className='Login-form' onSubmit={handleSubmit}>
             <input 
             type="email" 
-            ref={emailRef}
             placeholder='Username or email' 
             required
+            onChange={(event) => {
+              setLoginEmail(event.target.value);
+            }}
             />
             <input 
             type="password"
-            ref={passwordRef}
             placeholder='Password' 
-            required 
+            required
+            onChange={(event) => {
+              setLoginPassword(event.target.value);
+            }} 
             />
-            <button disabled={loading} className='Login-btn'>Log in</button>
+            <button className='Login-btn'>Log in</button>
           </form>
           <Link className='forgot' to='/forgot-password'>Forgot Password?</Link>
         </div>
         <div className='Signup-box'>
-            Don't have an account? <Link to="/signup">&nbsp;Sign Up</Link>&nbsp;or<Link to='/dashboard'> &nbsp;Enter as guest</Link>
+            Don't have an account? <Link to="/signup">&nbsp;Sign Up</Link>
         </div>
         <div className='get-app'>Get the app.</div>
         <a href='https://apps.apple.com/app/instagram/id389801252?vt=lo'>

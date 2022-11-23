@@ -1,5 +1,9 @@
-import React, { useRef, useState } from 'react';
-import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
+import React, { useState } from 'react';
+import { 
+  createUserWithEmailAndPassword, 
+  onAuthStateChanged,
+} from 'firebase/auth';
+import { auth } from '../firebase-config';
 import { Link, useNavigate } from 'react-router-dom';
 import phone from '../images/phone.png';
 import instagram from '../images/instagram.png';
@@ -8,32 +12,46 @@ import playstore from '../images/playstore.png';
 import '../App.css';
 
 export default function Signup() {
-    const emailRef = useRef();
-    const userNameRef = useRef();
-    const passwordRef = useRef();
-    const passwordConfirmRef = useRef();
-    const auth = getAuth();
+    const [registerEmail, setRegisterEmail] = useState('');
+    const [userName, setUserName] = useState('');
+    const [registerPassword, setRegisterPassword] = useState('');
+    const [passwordConfirm, setPasswordConfirm] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
-    async function handleSubmit(e) {
+    const [user, setUser] = useState({});
+
+    onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+    })
+
+    const register = async () => {
+      try {
+        setError('');
+        setLoading(true);
+        const user = await createUserWithEmailAndPassword(
+          auth, 
+          registerEmail, 
+          registerPassword
+        );
+        console.log(user);
+        navigate('/dashboard');
+      } catch (error) {
+        setError('Failed to create an account');
+      }
+      setLoading(false);
+    };
+
+    function handleSubmit(e) {
       e.preventDefault()
 
-      if (passwordRef.current.value !==
-        passwordConfirmRef.current.value) {
+      if (registerPassword !==
+        passwordConfirm) {
           return setError('Passwords do not match')
         }
 
-      try {
-        setError('')
-        setLoading(true)
-        createUserWithEmailAndPassword(auth, emailRef.current.value, passwordRef.current.value)
-        navigate('/dashboard')
-      } catch {
-        setError('Failed to create an account')
-      }
-      setLoading(false)
+      register();
     }
 
   return (
@@ -47,27 +65,35 @@ export default function Signup() {
           <form className='Login-form' onSubmit={handleSubmit}>
             <input 
             type="email" 
-            ref={emailRef}
             placeholder='Email' 
             required
+            onChange={(event) => {
+              setRegisterEmail(event.target.value);
+            }}
             />
             <input 
             type="text" 
-            ref={userNameRef}
             placeholder='Username' 
             required
+            onChange={(event) => {
+              setUserName(event.target.value);
+            }}
             />
             <input 
             type="password"
-            ref={passwordRef}
             placeholder='Password' 
-            required 
+            required
+            onChange={(event) => {
+              setRegisterPassword(event.target.value);
+            }} 
             />
             <input 
             type="password"
-            ref={passwordConfirmRef}
             placeholder='Confirm Password' 
-            required 
+            required
+            onChange={(event) => {
+              setPasswordConfirm(event.target.value);
+            }} 
             />
             <button disabled={loading} className='Login-btn'>Sign up</button>
           </form>

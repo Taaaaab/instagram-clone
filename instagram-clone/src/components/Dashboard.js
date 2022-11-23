@@ -15,18 +15,23 @@ import {
   serverTimestamp,
 } from 'firebase/firestore';
 import {  
-  useAuth,
-  onAuthStateChanged 
+  onAuthStateChanged,
+  signOut,
 } from 'firebase/auth';
 import { auth, db } from '../firebase-config';
 
 const Dashboard = () => {
   const [likes, setLikes] = useState(0);
   const [error, setError] = useState('');
-  const {currentUser, logout} = useAuth();
   const navigate = useNavigate();
   const commentRef = useRef();
   const [comments, setComments] = useState([]);
+
+  const [user, setUser] = useState({});
+
+  onAuthStateChanged(auth, (currentUser) => {
+    setUser(currentUser);
+  })
 
   function handleLike() {
     setLikes(likes + 1)
@@ -59,7 +64,7 @@ const Dashboard = () => {
   // Add a new message entry to the Firebase database.
   try {
     await addDoc(collection(getFirestore(), 'comments'), {
-      name: currentUser.email,
+      name: auth.currentUser.email,
       text: commentRef.current.value,
       timestamp: serverTimestamp()
     });
@@ -70,18 +75,16 @@ const Dashboard = () => {
   }
  }
 
- 
-
- async function handleLogout() {
-  setError('')
+ const logout = async () => {
+  setError('');
 
   try {
-    await logout()
-    navigate('/')
+    await signOut(auth);
+    navigate('/');
   } catch {
-    setError('Failed to log out')
+    setError('Failed to log out');
   }
-}
+ };
 
     return (
       <div className='container'>
@@ -92,8 +95,8 @@ const Dashboard = () => {
             <input className='Search-input' placeholder='Search'/>
           </div>
           <div className='Login-signup'>
-            <strong>Email:</strong> {currentUser.email}
-            <button onClick={handleLogout} id='sign-in' className='Login'>Log Out</button>
+            <strong>Email:</strong> {user?.email}
+            <button onClick={logout} id='sign-in' className='Login'>Log Out</button>
           </div>
         </header>
         <div className='Img-box'>
