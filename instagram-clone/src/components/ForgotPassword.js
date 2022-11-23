@@ -17,15 +17,16 @@ export default function ForgotPassword() {
     async function handleSubmit(e) {
       e.preventDefault()
 
-      try {
-        setMessage('')
-        setError('')
-        setLoading(true)
-        await sendPasswordResetEmail(auth, emailRef.current.value)
-        setMessage('Check your inbox for further instructions')
-      } catch {
-        setError('Failed to reset password')
-      }
+      setMessage('')
+      setError('')
+      setLoading(true)
+      sendPasswordResetEmail(auth, emailRef.current.value)
+        .then(() => {
+          setMessage('Check your inbox for further instructions');
+        })
+        .catch((error) => {
+          setError('Failed to reset password');
+        }) 
       setLoading(false)
     }
 

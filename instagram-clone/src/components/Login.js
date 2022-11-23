@@ -1,6 +1,9 @@
 import React, { useRef, useState } from 'react';
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
-import { useAuth } from '../contexts/AuthContext';
+import { 
+  getAuth, 
+  connectAuthEmulator,
+  signInWithEmailAndPassword 
+} from 'firebase/auth';
 import { Link, useNavigate } from 'react-router-dom';
 import phone from '../images/phone.png';
 import instagram from '../images/instagram.png';
@@ -11,7 +14,7 @@ import '../App.css';
 export default function Login() {
     const emailRef = useRef();
     const passwordRef = useRef();
-    const authentication = getAuth();
+    const auth = getAuth();
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
@@ -22,9 +25,10 @@ export default function Login() {
       try {
         setError('')
         setLoading(true)
-        await signInWithEmailAndPassword(authentication, emailRef.current.value, passwordRef.current.value)
-        navigate('/dashboard')
-      } catch {
+        const userCredential = await signInWithEmailAndPassword(auth, emailRef.current.value, passwordRef.current.value)
+          navigate('/dashboard')
+      } 
+      catch {
         setError('Failed to log in')
       }
       setLoading(false)

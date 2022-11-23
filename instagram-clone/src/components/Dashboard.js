@@ -7,7 +7,6 @@ import bushBaby from '../images/bushbaby.jpeg';
 import HeartImage from './HeartImage';
 import CommentImage from './CommentImage';
 import '../Dashboard.css';
-import {useAuth} from '../contexts/AuthContext';
 import {
   getFirestore,
   collection,
@@ -15,7 +14,11 @@ import {
   addDoc,
   serverTimestamp,
 } from 'firebase/firestore';
-import { db } from '../lib/init-firebase';
+import {  
+  useAuth,
+  onAuthStateChanged 
+} from 'firebase/auth';
+import { auth, db } from '../firebase-config';
 
 const Dashboard = () => {
   const [likes, setLikes] = useState(0);
@@ -50,18 +53,6 @@ const Dashboard = () => {
 
   }
 
-  async function handleLogout() {
-    setError('')
-
-    try {
-      await logout()
-      navigate('/')
-    } catch {
-      setError('Failed to log out')
-    }
-  }
-
-
   // Saves a new message to Cloud Firestore.
   async function saveMessage(e) {
     e.preventDefault()
@@ -78,6 +69,19 @@ const Dashboard = () => {
     console.error('Error writing new message to Firebase Database', error);
   }
  }
+
+ 
+
+ async function handleLogout() {
+  setError('')
+
+  try {
+    await logout()
+    navigate('/')
+  } catch {
+    setError('Failed to log out')
+  }
+}
 
     return (
       <div className='container'>

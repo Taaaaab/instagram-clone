@@ -1,6 +1,5 @@
 import React, { useRef, useState } from 'react';
 import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
-import { useAuth } from '../contexts/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
 import phone from '../images/phone.png';
 import instagram from '../images/instagram.png';
@@ -10,9 +9,10 @@ import '../App.css';
 
 export default function Signup() {
     const emailRef = useRef();
+    const userNameRef = useRef();
     const passwordRef = useRef();
     const passwordConfirmRef = useRef();
-    const authentication = getAuth();
+    const auth = getAuth();
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate()
@@ -24,12 +24,11 @@ export default function Signup() {
         passwordConfirmRef.current.value) {
           return setError('Passwords do not match')
         }
-      
 
       try {
         setError('')
         setLoading(true)
-        await createUserWithEmailAndPassword(authentication, emailRef.current.value, passwordRef.current.value)
+        createUserWithEmailAndPassword(auth, emailRef.current.value, passwordRef.current.value)
         navigate('/dashboard')
       } catch {
         setError('Failed to create an account')
@@ -49,7 +48,13 @@ export default function Signup() {
             <input 
             type="email" 
             ref={emailRef}
-            placeholder='Username or email' 
+            placeholder='Email' 
+            required
+            />
+            <input 
+            type="text" 
+            ref={userNameRef}
+            placeholder='Username' 
             required
             />
             <input 

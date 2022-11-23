@@ -42,10 +42,9 @@
 }
 
 .error {
-  position: absolute;
-  top: 220px;
   background-color: lightpink;
   border-radius: 5px;
+  margin-top: -30px;
   padding: 5px;
   font-size: 16px;
   color: darkred;
@@ -132,10 +131,9 @@ a {
 }
 
 .message {
-  position: absolute;
-  top: 218px;
   background-color: lightgreen;
   border-radius: 5px;
+  margin-top: -30px;
   padding: 5px;
   font-size: 16px;
   color: darkgreen;

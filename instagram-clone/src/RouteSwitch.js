@@ -5,12 +5,10 @@ import Login from "./components/Login";
 import ForgotPassword from "./components/ForgotPassword";
 import Dashboard from "./components/Dashboard";
 import Profile from "./components/Profile";
-import { AuthProvider } from "./contexts/AuthContext";
 
 const RouteSwitch = () => {
   return (
     <BrowserRouter>
-      <AuthProvider>
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
@@ -18,7 +16,6 @@ const RouteSwitch = () => {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/profile" element={<Profile />} />
         </Routes>
-      </AuthProvider>
     </BrowserRouter>
   );
 };
