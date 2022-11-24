@@ -19,7 +19,7 @@ import { auth, db } from '../firebase-config';
 
 const Dashboard = () => {
   const {user, logout} = UserAuth();
-  const [likes, setLikes] = useState(0);
+  const [likes, setLikes] = useState([]);
   const [error, setError] = useState('');
   const navigate = useNavigate();
   const commentRef = useRef();
@@ -34,10 +34,6 @@ const Dashboard = () => {
       console.log(e.message);
       setError('Error logging out');
     }
-  }
-
-  function handleLike() {
-    setLikes(likes + 1)
   }
 
   useEffect(() => {
@@ -79,6 +75,21 @@ const Dashboard = () => {
   }
  }
 
+ function getLikes() {
+  const photo1Likes = collection(db, 'bushbaby-likes')
+  getDocs(photo1Likes)
+    .then(response => {
+      const like = response.docs.map(doc => ({
+        data: doc.data(),
+        id: doc.id,
+      }))
+      setLikes(like)
+  }).catch(error => console.log(error.message))
+
+}
+
+getLikes();
+
     return (
       <div className='container'>
         <header className='nav-bar'>
@@ -88,7 +99,7 @@ const Dashboard = () => {
             <input className='Search-input' placeholder='Search'/>
           </div>
           <div className='Login-signup'>
-            <strong>Username:</strong> {user && user.displayName}
+            <strong>@</strong> {user && user.displayName}
             <button onClick={handleLogout} id='sign-in' className='Login'>Log Out</button>
           </div>
         </header>
@@ -114,7 +125,9 @@ const Dashboard = () => {
             </div>
           </div>
           <div className='Img-comments'>
-            <div className='likes'>{likes} likes</div>
+            <div className='likes'>
+              {likes.map(like => <div key={like.id}>{like.data.likes}</div>)}&nbsp;likes
+            </div>
             <button onClick={() => getComments()} className='view-all'>View All Comments</button>
             <ul className='comments'>
               {comments.map(comment => <li key={comment.id}><strong>{comment.data.username}</strong>&nbsp;{comment.data.text}</li>)}
