@@ -1,10 +1,6 @@
 import React, { useState } from 'react';
-import { 
-  createUserWithEmailAndPassword, 
-  onAuthStateChanged,
-} from 'firebase/auth';
-import { auth } from '../firebase-config';
 import { Link, useNavigate } from 'react-router-dom';
+import { UserAuth } from '../context/AuthContext';
 import phone from '../images/phone.png';
 import instagram from '../images/instagram.png';
 import appstore from '../images/appstore.png';
@@ -12,47 +8,26 @@ import playstore from '../images/playstore.png';
 import '../App.css';
 
 export default function Signup() {
-    const [registerEmail, setRegisterEmail] = useState('');
+    const [email, setEmail] = useState('');
     const [userName, setUserName] = useState('');
-    const [registerPassword, setRegisterPassword] = useState('');
+    const [password, setPassword] = useState('');
     const [passwordConfirm, setPasswordConfirm] = useState('');
     const [error, setError] = useState('');
-    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
-    const [user, setUser] = useState({});
+    const { createUser } = UserAuth();
 
-    onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
-    })
-
-    const register = async () => {
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+      setError('');
       try {
-        setError('');
-        setLoading(true);
-        const user = await createUserWithEmailAndPassword(
-          auth, 
-          registerEmail, 
-          registerPassword
-        );
-        console.log(user);
+        await createUser(email, password, userName)
         navigate('/dashboard');
-      } catch (error) {
-        setError('Failed to create an account');
+      } catch (e) {
+        setError(e.message);
+        console.log(e.message);
       }
-      setLoading(false);
     };
-
-    function handleSubmit(e) {
-      e.preventDefault()
-
-      if (registerPassword !==
-        passwordConfirm) {
-          return setError('Passwords do not match')
-        }
-
-      register();
-    }
 
   return (
     <div className="App">
@@ -67,35 +42,27 @@ export default function Signup() {
             type="email" 
             placeholder='Email' 
             required
-            onChange={(event) => {
-              setRegisterEmail(event.target.value);
-            }}
+            onChange={(e) => setEmail(e.target.value)}
             />
             <input 
             type="text" 
             placeholder='Username' 
             required
-            onChange={(event) => {
-              setUserName(event.target.value);
-            }}
+            onChange={(e) => setUserName(e.target.value)}
             />
             <input 
             type="password"
             placeholder='Password' 
             required
-            onChange={(event) => {
-              setRegisterPassword(event.target.value);
-            }} 
+            onChange={(e) => setPassword(e.target.value)} 
             />
             <input 
             type="password"
             placeholder='Confirm Password' 
             required
-            onChange={(event) => {
-              setPasswordConfirm(event.target.value);
-            }} 
+            onChange={(e) => setPasswordConfirm(e.target.value)} 
             />
-            <button disabled={loading} className='Login-btn'>Sign up</button>
+            <button className='Login-btn'>Sign up</button>
           </form>
         </div>
         <div className='Signup-box'>

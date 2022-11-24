@@ -1,6 +1,6 @@
-import React, { useRef, useState } from 'react';
-import { getAuth, sendPasswordResetEmail } from 'firebase/auth'
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { UserAuth } from '../context/AuthContext';
 import phone from '../images/phone.png';
 import instagram from '../images/instagram.png';
 import appstore from '../images/appstore.png';
@@ -8,27 +8,24 @@ import playstore from '../images/playstore.png';
 import '../App.css';
 
 export default function ForgotPassword() {
-    const emailRef = useRef();
-    const auth = getAuth();
+    const [email, setEmail] = useState();
     const [error, setError] = useState('');
     const [message, setMessage] = useState('');
-    const [loading, setLoading] = useState(false);
+    
+    const { passwordReset } = UserAuth();
 
-    async function handleSubmit(e) {
-      e.preventDefault()
-
-      setMessage('')
-      setError('')
-      setLoading(true)
-      sendPasswordResetEmail(auth, emailRef.current.value)
-        .then(() => {
-          setMessage('Check your inbox for further instructions');
-        })
-        .catch((error) => {
-          setError('Failed to reset password');
-        }) 
-      setLoading(false)
-    }
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+      
+      setMessage('');
+      setError('');
+      try {
+        await passwordReset(email)
+        setMessage('Check your inbox for further instructions');
+      } catch (e) {
+        setError('Failed to reset password');
+      }
+    };
 
   return (
     <div className="App">
@@ -42,11 +39,11 @@ export default function ForgotPassword() {
           <form className='Login-form' onSubmit={handleSubmit}>
             <input 
             type="email" 
-            ref={emailRef}
             placeholder='Email' 
             required
+            onChange={(e) => setEmail(e.target.value)}
             />
-            <button disabled={loading} className='Login-btn'>Reset Password</button>
+            <button className='Login-btn'>Reset Password</button>
           </form>
           <Link className='forgot' to='/'>Login</Link>
         </div>

@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import instagram from '../images/instagram.png';
 import search from '../images/search.svg';
 import profile from '../images/profile.png';
@@ -7,6 +7,7 @@ import bushBaby from '../images/bushbaby.jpeg';
 import HeartImage from './HeartImage';
 import CommentImage from './CommentImage';
 import '../Dashboard.css';
+import { UserAuth } from '../context/AuthContext';
 import {
   getFirestore,
   collection,
@@ -14,24 +15,26 @@ import {
   addDoc,
   serverTimestamp,
 } from 'firebase/firestore';
-import {  
-  onAuthStateChanged,
-  signOut,
-} from 'firebase/auth';
 import { auth, db } from '../firebase-config';
 
 const Dashboard = () => {
+  const {user, logout} = UserAuth();
   const [likes, setLikes] = useState(0);
   const [error, setError] = useState('');
   const navigate = useNavigate();
   const commentRef = useRef();
   const [comments, setComments] = useState([]);
 
-  const [user, setUser] = useState({});
-
-  onAuthStateChanged(auth, (currentUser) => {
-    setUser(currentUser);
-  })
+  const handleLogout = async () => {
+    try {
+      await logout();
+      navigate('/');
+      console.log('You are logged out');
+    } catch (e) {
+      console.log(e.message);
+      setError('Error logging out');
+    }
+  }
 
   function handleLike() {
     setLikes(likes + 1)
@@ -64,7 +67,8 @@ const Dashboard = () => {
   // Add a new message entry to the Firebase database.
   try {
     await addDoc(collection(getFirestore(), 'comments'), {
-      name: auth.currentUser.email,
+      email: auth.currentUser.email,
+      username: auth.currentUser.displayName,
       text: commentRef.current.value,
       timestamp: serverTimestamp()
     });
@@ -75,17 +79,6 @@ const Dashboard = () => {
   }
  }
 
- const logout = async () => {
-  setError('');
-
-  try {
-    await signOut(auth);
-    navigate('/');
-  } catch {
-    setError('Failed to log out');
-  }
- };
-
     return (
       <div className='container'>
         <header className='nav-bar'>
@@ -95,8 +88,8 @@ const Dashboard = () => {
             <input className='Search-input' placeholder='Search'/>
           </div>
           <div className='Login-signup'>
-            <strong>Email:</strong> {user?.email}
-            <button onClick={logout} id='sign-in' className='Login'>Log Out</button>
+            <strong>Username:</strong> {user && user.displayName}
+            <button onClick={handleLogout} id='sign-in' className='Login'>Log Out</button>
           </div>
         </header>
         <div className='Img-box'>
@@ -124,7 +117,7 @@ const Dashboard = () => {
             <div className='likes'>{likes} likes</div>
             <button onClick={() => getComments()} className='view-all'>View All Comments</button>
             <ul className='comments'>
-              {comments.map(comment => <li key={comment.id}><strong>{comment.data.name}</strong>&nbsp;{comment.data.text}</li>)}
+              {comments.map(comment => <li key={comment.id}><strong>{comment.data.username}</strong>&nbsp;{comment.data.text}</li>)}
             </ul>
             <span className='line'></span>
             <input className='Add-comment' ref={commentRef} type='text' placeholder='Add a comment...' />

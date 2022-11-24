@@ -1,10 +1,6 @@
 import React, { useState } from 'react';
-import { 
-  signInWithEmailAndPassword,
-  onAuthStateChanged,
-} from 'firebase/auth';
-import { auth } from '../firebase-config';
 import { Link, useNavigate } from 'react-router-dom';
+import { UserAuth } from '../context/AuthContext';
 import phone from '../images/phone.png';
 import instagram from '../images/instagram.png';
 import appstore from '../images/appstore.png';
@@ -17,29 +13,17 @@ export default function Login() {
     const [error, setError] = useState('');
     const navigate = useNavigate();
 
-    const [user, setUser] = useState({});
+    const { signIn } = UserAuth();
 
-    onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
-    })
-
-    function handleSubmit(e) {
+    const handleSubmit = async (e) => {
       e.preventDefault();
-      handleLogin();
-    }
-
-    const handleLogin = async () => {
+      setError('');
       try {
-        setError('');
-        const user = await signInWithEmailAndPassword(
-          auth, 
-          loginEmail, 
-          loginPassword
-        );
-        console.log(user);
+        await signIn(loginEmail, loginPassword);
         navigate('/dashboard');
-      } catch (error) {
-        setError('Failed to create an account');
+      } catch (e) {
+        setError(e.message);
+        console.log(e.message);
       }
     };
 
@@ -56,17 +40,13 @@ export default function Login() {
             type="email" 
             placeholder='Username or email' 
             required
-            onChange={(event) => {
-              setLoginEmail(event.target.value);
-            }}
+            onChange={(e) => setLoginEmail(e.target.value)}
             />
             <input 
             type="password"
             placeholder='Password' 
             required
-            onChange={(event) => {
-              setLoginPassword(event.target.value);
-            }} 
+            onChange={(e) => setLoginPassword(e.target.value)} 
             />
             <button className='Login-btn'>Log in</button>
           </form>
