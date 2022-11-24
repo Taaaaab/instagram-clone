@@ -14,6 +14,7 @@ import {
   getDocs,
   addDoc,
   serverTimestamp,
+  FieldValue,
 } from 'firebase/firestore';
 import { auth, db } from '../firebase-config';
 
@@ -38,6 +39,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     getComments()
+    getLikes();
   }, []);
 
   useEffect(() => {
@@ -75,6 +77,7 @@ const Dashboard = () => {
   }
  }
 
+// function to refresh likes from firestore db
  function getLikes() {
   const photo1Likes = collection(db, 'bushbaby-likes')
   getDocs(photo1Likes)
@@ -88,8 +91,6 @@ const Dashboard = () => {
 
 }
 
-getLikes();
-
     return (
       <div className='container'>
         <header className='nav-bar'>
@@ -99,7 +100,7 @@ getLikes();
             <input className='Search-input' placeholder='Search'/>
           </div>
           <div className='Login-signup'>
-            <strong>@</strong> {user && user.displayName}
+            @{user && user.displayName}
             <button onClick={handleLogout} id='sign-in' className='Login'>Log Out</button>
           </div>
         </header>
