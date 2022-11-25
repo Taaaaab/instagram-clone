@@ -133,12 +133,6 @@ body {
     cursor: pointer;
 }
 
-.red-heart {
-    fill: #ee4956;
-    stroke: transparent;
-    stroke-width: 0px;
-}
-
 .Img-comments {
     display: flex;
     flex-direction: column;
