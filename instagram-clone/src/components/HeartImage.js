@@ -1,13 +1,4 @@
 import React, { useState } from 'react';
-import {
-  getFirestore,
-  collection,
-  setDoc,
-  FieldValue,
-  increment,
-} from 'firebase/firestore';
-import { assert, assertionError, FirebaseError } from '@firebase/util';
-import { db } from '../firebase-config';
 
 export default function HeartImage({ onClick, fill, stroke }) {
   return (
