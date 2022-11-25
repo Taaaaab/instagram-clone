@@ -5,12 +5,9 @@
     },
     "extends": [
         "plugin:react/recommended",
-        "standard-with-typescript"
+        "airbnb"
     ],
     "overrides": [
-        {
-            "files": ["*.jsx", "*.js"]
-        }
     ],
     "parserOptions": {
         "ecmaVersion": "latest",
@@ -20,6 +17,7 @@
         "react"
     ],
     "rules": {
-        "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }]
+        "react/jsx-filename-extension": [0],
+        "import/extensions": "off"
     }
 }

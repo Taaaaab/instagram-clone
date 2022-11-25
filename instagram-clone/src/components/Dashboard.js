@@ -8,7 +8,7 @@ import {
   getDocs,
   addDoc,
   serverTimestamp,
-  FieldValue,
+  doc,
   updateDoc,
   increment,
 } from 'firebase/firestore';
@@ -99,11 +99,21 @@ function Dashboard() {
   async function heartClick(e) {
     setIsActive((current) => !current);
     try {
-      const likesRef = collection(db, 'bushbaby-likes');
-      const allLikes = await getDocs(likesRef);
-      updateDoc(allLikes, {
-        likes: increment(1),
-      });
+      if (isActive === false) {
+        const likesRef = doc(db, 'bushbaby-likes', 'lk5wzow6BTZQgn1woRu0');
+
+        await updateDoc(likesRef, {
+          likes: increment(1),
+        });
+        getLikes();
+      } else if (isActive === true) {
+        const likesRef = doc(db, 'bushbaby-likes', 'lk5wzow6BTZQgn1woRu0');
+
+        await updateDoc(likesRef, {
+          likes: increment(-1),
+        });
+        getLikes();
+      }
     } catch (e) {
       console.log(e.message);
     }
