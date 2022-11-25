@@ -78,6 +78,7 @@ function Dashboard() {
         timestamp: serverTimestamp(),
       });
       commentRef.current.value = ('');
+      getComments();
     } catch (error) {
       console.error('Error writing new message to Firebase Database', error);
     }

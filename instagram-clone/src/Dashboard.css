@@ -188,10 +188,17 @@ svg {
     
 }
 
-.comments {
+ul,
+li {
     list-style: none;
     padding-left: 0;
-    margin-top: 5px;
-    font-size: 14px;
+}
+
+.comments {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    padding-left: 0;
     line-height: 20px;
+    font-size: 14px;
 }
