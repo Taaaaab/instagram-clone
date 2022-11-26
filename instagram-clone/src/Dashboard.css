@@ -55,6 +55,43 @@ body {
     border-bottom-style: hidden;
  }
 
+ input[type=file] {
+    cursor: pointer;
+    width: 200px;
+    max-width: 100%;
+    color: #444;
+    padding: 5px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    border: 0 none;
+ }
+
+ input[type=file]::file-selector-button {
+    cursor: pointer;
+    transition: background .2s ease-in-out;
+    color: #ffffff;
+    border-radius: 5px;
+    padding: 10px 20px;
+    background-color: #0095f6;
+    border: none;
+    font-size: 14px;
+    font-weight: bold;
+ }
+
+ .Upload-image {
+    cursor: pointer;
+    transition: background .2s ease-in-out;
+    color: #ffffff;
+    border-radius: 5px;
+    padding: 10px 20px;
+    background-color: #0095f6;
+    border: none;
+    font-size: 14px;
+    font-weight: bold;
+    margin: 0;
+    width: 150px;
+ }
+
 .Login-signup {
     display: flex;
     align-items: center;
@@ -72,7 +109,6 @@ body {
     width: 80px;
     height: 30px;
     border: 0 none;
-    margin-right: 10px;
     margin-left: 10px;
 }
 
@@ -122,8 +158,10 @@ body {
     max-width: 40px;
 }
 
-.Bushbaby-img {
+.Bushbaby-img,
+.Img-upload {
     min-width: 100%;
+    max-width: 560px;
 }
 
 .Img-icons {
