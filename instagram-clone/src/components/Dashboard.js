@@ -11,12 +11,15 @@ import {
   doc,
   updateDoc,
   increment,
+  query,
+  orderBy,
+  limit,
 } from 'firebase/firestore';
 import { FirebaseError } from 'firebase/app';
 import { updateCurrentUser } from 'firebase/auth';
 import instagram from '../images/instagram.png';
 import search from '../images/search.svg';
-import profile from '../images/profile.png';
+import profile from '../images/profile2.png';
 import bushBaby from '../images/bushbaby.jpeg';
 import HeartImage from './HeartImage';
 import CommentImage from './CommentImage';
@@ -56,7 +59,8 @@ function Dashboard() {
   // function to grab comments from firebase
   function getComments() {
     const commentCollectionRef = collection(db, 'comments');
-    getDocs(commentCollectionRef)
+    const q = query(commentCollectionRef, orderBy('timestamp'), limit(5));
+    getDocs(q)
       .then((response) => {
         const comm = response.docs.map((doc) => ({
           data: doc.data(),
@@ -181,7 +185,9 @@ function Dashboard() {
             ))}
           </ul>
           <span className="line" />
-          <input className="Add-comment" ref={commentRef} type="text" placeholder="Add a comment..." />
+          <form onSubmit={saveMessage}>
+            <input className="Add-comment" ref={commentRef} type="text" placeholder="Add a comment..." />
+          </form>
         </div>
       </div>
     </div>
