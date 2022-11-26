@@ -4,7 +4,6 @@ import Signup from './components/Signup';
 import Login from './components/Login';
 import ForgotPassword from './components/ForgotPassword';
 import Dashboard from './components/Dashboard';
-import Profile from './components/Profile';
 import ProtectedRoute from './components/ProtectedRoute';
 import { AuthContextProvider } from './context/AuthContext';
 
@@ -24,7 +23,6 @@ function RouteSwitch() {
               </ProtectedRoute>
           )}
           />
-          <Route path="/profile" element={<Profile />} />
         </Routes>
       </AuthContextProvider>
     </BrowserRouter>
