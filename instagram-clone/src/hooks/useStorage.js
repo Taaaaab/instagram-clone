@@ -31,7 +31,7 @@ const useStorage = (file) => {
         createdAt: serverTimestamp(),
         userName: auth.currentUser.displayName,
         likes: 0,
-        comments: 0,
+        comments: '',
       });
     });
   }, [file]);

@@ -5,7 +5,7 @@ import phone from '../images/phone.png';
 import instagram from '../images/instagram.png';
 import appstore from '../images/appstore.png';
 import playstore from '../images/playstore.png';
-import '../App.css';
+import '../index.css';
 
 export default function Signup() {
   const [email, setEmail] = useState('');
