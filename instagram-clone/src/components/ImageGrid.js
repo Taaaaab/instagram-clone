@@ -1,6 +1,6 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import {
-  collection, doc, updateDoc, increment, addDoc, serverTimestamp, setDoc, query, orderBy, getDocs, limit,
+  doc, updateDoc, increment, query, where, onSnapshot, getDoc, Timestamp,
 } from 'firebase/firestore';
 import { uuidv4 } from '@firebase/util';
 import useFirestore from '../hooks/useFirestore';
@@ -11,6 +11,7 @@ import HeartImage from './HeartImage';
 import CommentImage from './CommentImage';
 import ShareImage from './ShareImage';
 import ShareImage2 from './ShareImage2';
+import Comment from './Comment';
 
 function ImageGrid() {
   const { docs } = useFirestore('images');
@@ -18,9 +19,7 @@ function ImageGrid() {
 
   const { user } = UserAuth();
   const [isActive, setIsActive] = useState(false);
-  const commentRef = useRef();
-  const [comments, setComments] = useState([]);
-  const [id, setId] = useState('');
+  const [comment, setComment] = useState('');
 
   const handleLikes = (docId) => {
     setIsActive((current) => !current);
@@ -37,35 +36,6 @@ function ImageGrid() {
       });
     }
   };
-
-  async function handleComments(e, docId) {
-    e.preventDefault();
-    setId(docId);
-    const commentsRef = collection(db, docId);
-    try {
-      await addDoc(commentsRef, {
-        username: auth.currentUser.displayName,
-        comment: commentRef.current.value,
-        timestamp: serverTimestamp(),
-      });
-      commentRef.current.value = ('');
-    } catch (error) {
-      console.log(error.message);
-    }
-  }
-
-  function getComments() {
-    const commentCollectionRef = collection(db, id);
-    const q = query(commentCollectionRef, orderBy('timestamp'), limit(5));
-    getDocs(q)
-      .then((response) => {
-        const comm = response.docs.map((doc) => ({
-          data: doc.data(),
-          id: doc.id,
-        }));
-        setComments(comm);
-      }).catch((error) => console.log(error.message));
-  }
 
   return (
     <div className="img-grid">
@@ -99,25 +69,7 @@ function ImageGrid() {
               {doc.likes}
 &nbsp;likes
             </div>
-            <button type="button" className="view-all" onClick={getComments}>View All Comments</button>
-            <ul className="comments">
-              {comments.map((comment) => (
-                <li key={comment.id}>
-                  <strong>{comment.data.username}</strong>
-                &nbsp;
-                  {comment.data.comment}
-                </li>
-              ))}
-            </ul>
-            <span className="line" />
-            <form onSubmit={(e) => handleComments(e, doc.id)}>
-              <input
-                className="add-comment"
-                type="text"
-                ref={commentRef}
-                placeholder="Add a comment..."
-              />
-            </form>
+            <Comment id={doc.id} />
           </div>
         </div>
       ))}
