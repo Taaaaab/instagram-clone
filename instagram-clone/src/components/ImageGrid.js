@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import {
   doc, updateDoc, increment, query, where, onSnapshot, getDoc, Timestamp,
 } from 'firebase/firestore';
-import { uuidv4 } from '@firebase/util';
 import useFirestore from '../hooks/useFirestore';
 import { auth, db } from '../firebase-config';
 import { UserAuth } from '../context/AuthContext';
@@ -19,7 +18,6 @@ function ImageGrid() {
 
   const { user } = UserAuth();
   const [isActive, setIsActive] = useState(false);
-  const [comment, setComment] = useState('');
 
   const handleLikes = (docId) => {
     setIsActive((current) => !current);
