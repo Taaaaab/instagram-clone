@@ -1,4 +1,5 @@
 {
+  "homepage": "http://Taaaaab.github.io/instagram-clone",
   "name": "instagram-clone",
   "version": "0.1.0",
   "private": true,
@@ -14,6 +15,8 @@
   },
   "scripts": {
     "start": "ESLINT_NO_DEV_ERRORS=true react-scripts start",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
@@ -48,6 +51,7 @@
     "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-react": "^7.31.11",
     "eslint-plugin-react-hooks": "^4.6.0",
+    "gh-pages": "^4.0.0",
     "typescript": "^4.9.3"
   },
   "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
