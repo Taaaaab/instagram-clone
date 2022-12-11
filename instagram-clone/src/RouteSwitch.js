@@ -1,5 +1,7 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import {
+  BrowserRouter, Routes, Route, HashRouter,
+} from 'react-router-dom';
 import Signup from './components/Signup';
 import Login from './components/Login';
 import ForgotPassword from './components/ForgotPassword';
@@ -9,7 +11,7 @@ import { AuthContextProvider } from './context/AuthContext';
 
 function RouteSwitch() {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <AuthContextProvider>
         <Routes>
           <Route path="/" element={<Login />} />
@@ -25,7 +27,7 @@ function RouteSwitch() {
           />
         </Routes>
       </AuthContextProvider>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 
