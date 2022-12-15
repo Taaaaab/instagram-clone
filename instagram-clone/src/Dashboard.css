@@ -19,8 +19,8 @@ body {
     }
 
     .img-grid {
-        padding: 0;
-        margin: 0;
+       display: flex;
+       align-items: center;
     }
 
   }
@@ -141,7 +141,9 @@ body {
 }
 
 .img-grid {
-    padding: 60px;
+    display: flex;
+    flex-direction: column;
+    padding: 62px;
 }
 
 .img-box {

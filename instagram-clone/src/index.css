@@ -22,6 +22,15 @@ input, select, textarea {
   color: #1c1e21;
 }
 
+@media (max-width: 600px) {
+
+  .Phone-img {
+    display: none;
+  }
+
+
+}
+
 input {
   letter-spacing: normal;
   word-spacing: normal;
@@ -70,6 +79,16 @@ input:focus {
 .Instagram {
   margin: 30px;
   max-width: 200px;
+}
+
+.get-app {
+  display: flex;
+  justify-content: center;
+}
+
+.get-apps {
+  display: flex;
+  justify-content: center;
 }
 
 .Login-box {

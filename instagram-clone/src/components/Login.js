@@ -58,12 +58,14 @@ export default function Login() {
             <Link to="/signup">&nbsp;Sign Up</Link>
           </div>
           <div className="get-app">Get the app.</div>
-          <a href="https://apps.apple.com/app/instagram/id389801252?vt=lo">
-            <img className="appstore" alt="apple app store" src={appstore} />
-          </a>
-          <a href="https://play.google.com/store/apps/details?id=com.instagram.android">
-            <img className="playstore" alt="google play store" src={playstore} />
-          </a>
+          <div className="get-apps">
+            <a href="https://apps.apple.com/app/instagram/id389801252?vt=lo">
+              <img className="appstore" alt="apple app store" src={appstore} />
+            </a>
+            <a href="https://play.google.com/store/apps/details?id=com.instagram.android">
+              <img className="playstore" alt="google play store" src={playstore} />
+            </a>
+          </div>
         </div>
       </div>
       <footer>
